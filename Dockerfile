@@ -10,7 +10,8 @@ ENV APP_DIR /opt/IBIS_creator
 
 
 WORKDIR /opt
-RUN apk add --no-cache --virtual .dl-deps curl g++ make \
+RUN apk add swig g++ 
+RUN apk add --no-cache --virtual .dl-deps curl make \
 	# Install MeCab
 	&& curl -SL -o mecab-${MECAB_VERSION}.tar.gz ${mecab_url} \
 	&& tar -zxf mecab-${MECAB_VERSION}.tar.gz \
@@ -28,8 +29,7 @@ RUN apk add --no-cache --virtual .dl-deps curl g++ make \
 	&& make install \
 	&& cd ../ \
 	&& rm -Rf mecab* \
-	&& apk del .dl-deps \
-	&& apk add swig
+	&& apk del .dl-deps 
 
 # download source code
 WORKDIR ${APP_DIR}
