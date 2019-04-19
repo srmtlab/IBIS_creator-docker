@@ -1,0 +1,17 @@
+{
+  "FILENAME": "local_settings.json",
+  "SECRET_KEY": "",
+  "ALLOWED_HOSTS": [
+    "0.0.0.0"
+  ],
+  "STATIC_ROOT": "/opt/IBIS_creator/static/",
+  "LOD": false,
+  "LOD_RESOURCE": "",
+  "LOD_GRAPH_URI": "",
+  "VIRTUOSO_USER": "",
+  "VIRTUOSO_PASSWORD": "",
+  "VIRTUOSO_UPDATE_ENDPOINT": "",
+  "ONTOLOGY": "http://lod.srmt.nitech.ac.jp/IBIS_creator/ontology#",
+  "REDIS_HOST": "redis",
+  "REDIS_PORT": 6379
+}

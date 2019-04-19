@@ -8,7 +8,6 @@ ENV mecab_url https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7cENtOX
 ENV ipadic_url https://drive.google.com/uc?export=download&id=0B4y35FiV1wh7MWVlSDBCSXZMTXM
 ENV APP_DIR /opt/IBIS_creator
 
-
 WORKDIR /opt
 RUN apk add swig g++ 
 RUN apk add --no-cache --virtual .dl-deps curl make \
@@ -33,6 +32,7 @@ RUN apk add --no-cache --virtual .dl-deps curl make \
 
 # download source code
 WORKDIR ${APP_DIR}
+RUN mkdir static
 RUN apk add --no-cache --virtual .dl-deps git\
 	&& git clone https://github.com/srmtlab/IBIS_creator.git ${APP_DIR} \
 	&& apk del .dl-deps \
@@ -41,6 +41,15 @@ RUN apk add --no-cache --virtual .dl-deps git\
 COPY docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["daphne", "-p", "8000", "config.asgi:application"]
+COPY startup.sh ${APP_DIR}/
+RUN chmod +x ${APP_DIR}/startup.sh
 
+VOLUME ${APP_DIR}/SECRET_FILES/
+VOLUME ${APP_DIR}/static/
+
+COPY local_settings.json ${APP_DIR}/SECRET_FILES/
+RUN python3 manage.py collectstatic --settings config.settings.production
+
+EXPOSE 8000
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["./startup.sh"]
