@@ -32,7 +32,6 @@ RUN apk add --no-cache --virtual .dl-deps curl make \
 
 # download source code
 WORKDIR ${APP_DIR}
-RUN mkdir static
 RUN apk add --no-cache --virtual .dl-deps git\
 	&& git clone https://github.com/srmtlab/IBIS_creator.git ${APP_DIR} \
 	&& apk del .dl-deps \
@@ -44,11 +43,11 @@ RUN chmod +x /docker-entrypoint.sh
 COPY startup.sh ${APP_DIR}/
 RUN chmod +x ${APP_DIR}/startup.sh
 
+RUN mkdir static
 VOLUME ${APP_DIR}/SECRET_FILES/
 VOLUME ${APP_DIR}/static/
 
 COPY local_settings.json ${APP_DIR}/SECRET_FILES/
-RUN python3 manage.py collectstatic --settings config.settings.production
 
 EXPOSE 8000
 ENTRYPOINT ["/docker-entrypoint.sh"]
