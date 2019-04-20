@@ -33,7 +33,7 @@ RUN apk add --no-cache --virtual .dl-deps curl make \
 # download source code
 WORKDIR ${APP_DIR}
 RUN apk add --no-cache --virtual .dl-deps git\
-	&& git clone https://github.com/srmtlab/IBIS_creator.git ${APP_DIR} \
+	&& git clone -b docker https://github.com/srmtlab/IBIS_creator.git ${APP_DIR} \
 	&& apk del .dl-deps \
 	&& pip install -r requirements/production.txt 
 
@@ -46,8 +46,6 @@ RUN chmod +x ${APP_DIR}/startup.sh
 RUN mkdir static
 VOLUME ${APP_DIR}/SECRET_FILES/
 VOLUME ${APP_DIR}/static/
-
-COPY local_settings.json ${APP_DIR}/SECRET_FILES/
 
 EXPOSE 8000
 ENTRYPOINT ["/docker-entrypoint.sh"]
